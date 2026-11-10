@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://amuwa-hub.github.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://amuwa-hub.github.io; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src https://koku.app.n8n.cloud; base-uri 'none'; form-action 'none'">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-title" content="WebTara">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#F5EDE4">
@@ -318,6 +321,74 @@ html,body{overflow-x:clip}
 @keyframes spRing{0%{transform:scale(.8);opacity:.9}100%{transform:scale(1.35);opacity:0}}
 @keyframes spUp{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){.sp-logo,.sp-ring,.sp-name,.sp-by,.sp-line{animation:none}}
+
+/* ---- search and filter on Enquiries ---- */
+.sbar{display:flex;flex-direction:column;gap:10px}
+.sfield{position:relative;display:flex;align-items:center;gap:10px;background:var(--card);border:1.5px solid transparent;border-radius:999px;padding:0 8px 0 16px;min-height:50px;color:var(--muted);box-shadow:0 1px 0 rgb(43 32 30 / .04),0 6px 18px -10px rgb(138 45 73 / .25);transition:border-color .16s var(--ease-out),box-shadow .2s var(--ease-out)}
+.sfield:focus-within{border-color:var(--lime2);box-shadow:0 0 0 4px rgb(247 201 211 / .45)}
+.sfield input{flex:1;min-width:0;border:0;background:transparent;font:inherit;font-size:15px;font-weight:600;color:var(--ink);outline:none;padding:12px 0}
+.sfield input::placeholder{color:var(--muted);font-weight:500}
+.sfield input::-webkit-search-cancel-button{display:none}
+.sx{flex:0 0 auto;width:34px;height:34px;border-radius:999px;border:0;background:var(--soft);color:var(--ink);display:grid;place-items:center;cursor:pointer;animation:popIn .18s var(--ease-out)}
+.sbar .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-2px;padding:2px}
+.sbar .chips::-webkit-scrollbar{display:none}
+.scount{font-size:13px;color:var(--muted);min-height:0}
+.scount:empty{display:none}
+.scount b{color:var(--ink)}
+mark{background:var(--lime);color:var(--ink);border-radius:4px;padding:0 2px}
+.linkbtn{border:0;background:none;padding:0;font:inherit;font-weight:700;color:var(--limeInk);text-decoration:underline;cursor:pointer}
+@keyframes popIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+/* ---- notes ---- */
+.addnote{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;border:1.5px dashed var(--line);background:none;border-radius:999px;padding:6px 12px;min-height:34px;font:inherit;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;transition:border-color .16s var(--ease-out),color .16s var(--ease-out),transform .16s var(--ease-out)}
+.note{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;border:0;background:var(--limeT);color:var(--ink);border-radius:16px;padding:10px 12px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:transform .16s var(--ease-out)}
+.note .nic{flex:0 0 auto;width:26px;height:26px;border-radius:999px;background:var(--card);color:var(--limeInk);display:grid;place-items:center}
+.note .ntx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.note small{font-size:11px;color:var(--limeInk);font-weight:700}
+.noteed{display:flex;flex-direction:column;gap:10px;background:var(--soft);border-radius:18px;padding:12px;animation:edIn .22s var(--ease-out)}
+.qn{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:-2px}
+.qn::-webkit-scrollbar{display:none}
+.qn .chip{flex:0 0 auto;background:var(--card);font-size:12px;min-height:34px}
+.noteed textarea,.uq textarea{width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;font:inherit;font-size:15px;background:var(--card);color:var(--ink);resize:vertical;transition:border-color .16s var(--ease-out),box-shadow .2s var(--ease-out)}
+.noteed textarea:focus,.uq textarea:focus{outline:none;border-color:var(--lime2);box-shadow:0 0 0 4px rgb(247 201 211 / .4)}
+.chip.dark{background:var(--ink);color:var(--card);border-color:var(--ink);display:inline-flex;align-items:center;gap:6px}
+.chip.lime{background:var(--lime);color:var(--ink);border-color:var(--lime)}
+@keyframes edIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+/* ---- Teach Tara (Pro) ---- */
+.teach{background:linear-gradient(160deg,var(--limeT) 0%,var(--card) 60%)}
+.teach .sp,.wktip .sp{width:40px;height:40px;flex:0 0 auto;border-radius:999px}
+.uq{position:relative;display:flex;flex-direction:column;gap:10px;margin-top:12px;padding:14px;border-radius:18px;background:var(--card);box-shadow:0 1px 0 var(--line);transition:opacity .25s var(--ease-out),transform .25s var(--ease-out)}
+.uq .q{margin:0;font-size:15px;font-weight:700;color:var(--ink)}
+.uq .chip{align-self:flex-start;display:inline-flex;align-items:center;gap:6px}
+.uq.open{box-shadow:0 0 0 2px var(--lime)}
+.uq .learned{position:absolute;inset:0;border-radius:18px;background:var(--lime);color:var(--limeInk);font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;opacity:0;transform:scale(.96);filter:blur(4px);pointer-events:none;transition:opacity .25s var(--ease-icon),transform .25s var(--ease-icon),filter .25s var(--ease-icon)}
+.uq.done .learned{opacity:1;transform:none;filter:none}
+.allgood{display:flex;align-items:center;gap:8px;margin-top:12px;padding:12px 14px;border-radius:16px;background:var(--card);font-weight:700;color:var(--limeInk)}
+/* ---- this week vs last week (Pro) ---- */
+.wkhead{display:flex;align-items:baseline;gap:8px;margin-top:6px}
+.wkhead b{font-size:40px;line-height:44px;font-weight:800;letter-spacing:-0.03em}
+.wkhead span{font-weight:600;color:var(--muted)}
+.wkcard .legend{margin-top:4px}
+.wbars{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;align-items:end;height:120px;margin-top:12px}
+.wb{display:flex;flex-direction:column;align-items:center;gap:6px;height:100%}
+.wb .pair{flex:1;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:3px}
+.wb i{display:block;width:40%;max-width:14px;border-radius:6px 6px 3px 3px;transform:scaleY(.04);transform-origin:bottom;transition:transform .52s var(--ease-out)}
+.wb i.t{background:var(--ink)}.wb i.p{background:var(--lime)}
+.wbars.in .wb i{transform:none}
+.wb span{font-size:11px;font-weight:600;color:var(--muted)}
+.wb.today span{color:var(--ink);font-weight:800}
+.wkrows{display:flex;flex-direction:column;margin-top:12px}
+.wkr{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:baseline;padding:10px 0;border-top:1px solid var(--line)}
+.wkr b{font-size:18px}
+.wktip{display:flex;gap:12px;align-items:flex-start;margin-top:12px;background:var(--limeT);border-radius:18px;padding:12px 14px}
+.wktip p{margin:0;font-size:14px;line-height:20px;color:var(--ink);font-weight:600}
+.wktip p b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--limeInk);margin-bottom:2px}
+/* ---- Account groups ---- */
+.mlabel{margin:6px 4px -4px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+@media (hover:hover) and (pointer:fine){.addnote:hover{border-color:var(--lime2);color:var(--ink)}}
+.addnote:active,.note:active,.sx:active{transform:scale(.96)}
+@media (prefers-reduced-motion:reduce){.noteed,.sx{animation:none}.wb i{transform:none;transition:none}.uq .learned{transition:opacity .2s}}
+.uq .row,.noteed .row{flex-wrap:wrap;row-gap:8px}
+.uq > .row > .muted,.noteed > .row > .muted{flex:1 1 140px}
 </style>
 </head>
 <body class="panel">
@@ -371,6 +442,10 @@ var RM = false; try { RM = window.matchMedia('(prefers-reduced-motion: reduce)')
 var $ = function(id){ return document.getElementById(id); };
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
 var I = {
+  note:'<path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
+  mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
+  add:'<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M12 8v6M9 11h6"/>',
   clip:'<rect x="8" y="3" width="8" height="4" rx="1"/><path d="M16 5h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2"/>',
   home:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
   list:'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
@@ -441,7 +516,7 @@ function shapeTickets(){
   var now = Date.now(); REQ = []; DONE = [];
   (D && D.tickets || []).forEach(function(t){
     var r = { id:t.id, name:t.name || 'Customer', ini:initials(t.name||'C'), at:when(t.created_at), created:t.created_at,
-      h: Math.max(0, Math.floor((now-new Date(t.created_at).getTime())/36e5)), f:fieldVals(t.fields), fields:t.fields||{}, phone:t.phone||'' };
+      h: Math.max(0, Math.floor((now-new Date(t.created_at).getTime())/36e5)), f:fieldVals(t.fields), fields:t.fields||{}, phone:t.phone||'', note:t.note||'', note_at:t.note_at||null };
     if (t.status==='new' && !pending[t.id]) REQ.push(r); else { r.at = t.called_back_at ? 'Called '+when(t.called_back_at) : r.at; DONE.push(r); }
   });
   REQ.sort(function(a,b){ return b.h-a.h; });
@@ -585,25 +660,81 @@ function homeFX(scr, firstTime){
 function telHref(p){ return 'tel:+91'+String(p).replace(/\D/g,'').slice(-10); }
 function waHref(p, text){ return 'https://wa.me/91'+String(p).replace(/\D/g,'').slice(-10)+(text?'?text='+encodeURIComponent(text):''); }
 function waDefault(r){ var bits=r.f.slice(0,2).join(', '); return 'Hi '+first(r.name)+', this is '+biz()+'. Thank you for your enquiry'+(bits?' ('+bits+')':'')+' on our website. Is this a good time to talk?'; }
+var QUICK = ['Called, no answer','Will confirm later','Sent details on WhatsApp','Order confirmed'];
+function noteBlock(r){
+  if (state.noteOpen===r.id) return '<div class="noteed"><div class="qn">'+QUICK.map(function(q){ return '<button type="button" class="chip press" data-qn="'+esc(q)+'">'+esc(q)+'</button>'; }).join('')+'</div><textarea id="noteIn" maxlength="500" rows="2" placeholder="Write a note for yourself">'+esc(state.noteDraft!=null?state.noteDraft:r.note)+'</textarea><div class="row" style="gap:8px;justify-content:space-between;align-items:center"><span class="muted" style="font-size:12px">Only you see notes</span><span class="row" style="gap:8px"><button type="button" class="chip press" data-notecancel="1">Cancel</button><button type="button" class="chip dark press" data-notesave="'+r.id+'">'+ic('check',14,2.4)+' Save</button></span></div></div>';
+  return r.note ? '<button type="button" class="note press" data-note="'+r.id+'"><span class="nic">'+ic('note',14)+'</span><span class="ntx"><span>'+hl(r.note)+'</span>'+(r.note_at?'<small>Note · '+esc(when(r.note_at))+'</small>':'')+'</span></button>' : '<button type="button" class="addnote press" data-note="'+r.id+'">'+ic('note',14)+'Add note</button>';
+}
 function reqCard(r){
   var lateDay = r.h>=24;
   return '<div class="swipe rv" data-id="'+r.id+'"><div class="under">'+ic('check',22,2.6)+'<span>Contacted</span></div>'
-  + '<article class="req'+(lateDay?' late':'')+'"><div class="row"><span class="av" style="background:'+(lateDay?'var(--alert)':'var(--limeT)')+';color:'+(lateDay?'var(--alertInk)':'var(--limeInk)')+'">'+esc(r.ini)+'</span><div style="flex:1;min-width:0"><b style="font-size:16px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(r.name)+'</b><span class="muted" style="font-size:12px">'+esc(r.at)+(r.phone?' · <span class="num">'+esc(r.phone)+'</span>':' · no number given')+'</span></div><span class="pill '+(r.h>=2?'late':'new')+'">'+(r.h>=2?'Waiting '+waitText(r.h):'New')+'</span></div>'
-  + (r.f.length?'<div class="fields">'+r.f.map(function(x){return '<span>'+esc(x)+'</span>';}).join('')+'</div>':'')
+  + '<article class="req'+(lateDay?' late':'')+'"><div class="row"><span class="av" style="background:'+(lateDay?'var(--alert)':'var(--limeT)')+';color:'+(lateDay?'var(--alertInk)':'var(--limeInk)')+'">'+esc(r.ini)+'</span><div style="flex:1;min-width:0"><b style="font-size:16px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+hl(r.name)+'</b><span class="muted" style="font-size:12px">'+esc(r.at)+(r.phone?' · <span class="num">'+hl(r.phone)+'</span>':' · no number given')+'</span></div><span class="pill '+(r.h>=2?'late':'new')+'">'+(r.h>=2?'Waiting '+waitText(r.h):'New')+'</span></div>'
+  + (r.f.length?'<div class="fields">'+r.f.map(function(x){return '<span>'+hl(x)+'</span>';}).join('')+'</div>':'')
+  + noteBlock(r)
   + '<div class="acts">'+(r.phone?'<a href="'+telHref(r.phone)+'" class="btn dark press" data-callx="'+r.id+'">'+ic('phone',16)+'Call</a><a href="'+waHref(r.phone, waDefault(r))+'" target="_blank" rel="noopener" class="btn soft press" data-wax="'+r.id+'">'+ic('wa',16)+'WhatsApp</a>':'<span class="btn soft" style="color:var(--muted);font-weight:600">No number. Reply when they visit</span>')
   + '<button type="button" class="ok press" data-ok="'+r.id+'" aria-label="Mark '+esc(r.name)+' contacted"><span class="i1">'+ic('check',18,2.4)+'</span><span class="i2">'+ic('check',18,2.6)+'</span></button></div></article></div>';
 }
+function hl(s){ var e = esc(s), q = String(state.q||'').trim(); if (!q) return e;
+  var words = q.split(/\s+/).filter(function(w){ return w.length>=2; }).map(function(w){ return esc(w).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); });
+  if (!words.length) return e; try { return e.replace(new RegExp('('+words.join('|')+')','gi'), '<mark>$1</mark>'); } catch(_) { return e; } }
+function matchR(r){
+  var q = String(state.q||'').trim().toLowerCase(), w = state.when||'all';
+  if (w!=='all') { var c = new Date(r.created), now = new Date(), d0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    if (w==='today' && c < d0) return false;
+    if (w==='yday' && (c < new Date(d0.getTime()-864e5) || c >= d0)) return false;
+    if (w==='week' && c < new Date(d0.getTime()-6*864e5)) return false;
+    if (w==='month' && c < new Date(d0.getTime()-29*864e5)) return false; }
+  if (!q) return true;
+  var hay = [r.name, r.phone, r.note].concat(Object.keys(r.fields||{}).map(function(k){ return r.fields[k]; })).join(' ').toLowerCase();
+  var digits = q.replace(/\D/g,'');
+  return q.split(/\s+/).every(function(p){ return hay.indexOf(p) >= 0; }) || (digits.length>=3 && String(r.phone).replace(/\D/g,'').indexOf(digits) >= 0);
+}
+function listHTML(){
+  var filtering = !!(String(state.q||'').trim() || (state.when && state.when!=='all'));
+  var W = REQ.filter(matchR), Dn = DONE.filter(matchR), done = Dn.slice(0, 40);
+  var none = '<div class="empty card rv">No enquiries match. <button type="button" class="linkbtn" data-clear="1">Clear search</button></div>';
+  if (state.seg===0) return W.length ? W.map(reqCard).join('') + (filtering?'':'<p class="hint rv">Tip: swipe a card right to mark it contacted</p>') : (filtering && REQ.length ? none : '<div class="empty card rv"><div class="big2">🎉</div>Everyone has been contacted.</div>');
+  return done.length ? done.map(doneCard).join('') + (Dn.length>40?'<p class="hint rv">Showing the latest 40. Search to find older ones.</p>':'') : (filtering && DONE.length ? none : '<div class="empty card rv">Enquiries you reply to will show here.</div>');
+}
+function doneCard(r){ return '<article class="req rv"><div class="row"><span class="av" style="background:var(--soft);color:var(--muted)">'+esc(r.ini)+'</span><div style="flex:1;min-width:0"><b style="display:block">'+hl(r.name)+'</b><span class="muted" style="font-size:12px">'+esc(r.at)+(r.phone?' · <span class="num">'+hl(r.phone)+'</span>':'')+'</span></div><span class="pill done">Contacted</span></div>'+(r.f.length?'<div class="fields">'+r.f.map(function(x){return '<span>'+hl(x)+'</span>';}).join('')+'</div>':'')+noteBlock(r)+'</article>'; }
 function reqHTML(){
   var done = DONE.slice(0, 40);
   var list = state.seg===0 ? (REQ.length ? REQ.map(reqCard).join('') + '<p class="hint rv">Tip: swipe a card right to mark it contacted</p>' : '<div class="empty card rv"><div class="big2">🎉</div>Everyone has been contacted.</div>')
-    : (done.length ? done.map(function(r){ return '<article class="req rv"><div class="row"><span class="av" style="background:var(--soft);color:var(--muted)">'+esc(r.ini)+'</span><div style="flex:1;min-width:0"><b style="display:block">'+esc(r.name)+'</b><span class="muted" style="font-size:12px">'+esc(r.at)+'</span></div><span class="pill done">Contacted</span></div>'+(r.f.length?'<div class="fields">'+r.f.map(function(x){return '<span>'+esc(x)+'</span>';}).join('')+'</div>':'')+'</article>'; }).join('') + (DONE.length>40?'<p class="hint rv">Showing the latest 40. Ask Tara to find older ones.</p>':'')
+    : (done.length ? done.map(function(r){ return '<article class="req rv"><div class="row"><span class="av" style="background:var(--soft);color:var(--muted)">'+esc(r.ini)+'</span><div style="flex:1;min-width:0"><b style="display:block">'+esc(r.name)+'</b><span class="muted" style="font-size:12px">'+esc(r.at)+'</span></div><span class="pill done">Contacted</span></div>'+(r.f.length?'<div class="fields">'+r.f.map(function(x){return '<span>'+esc(x)+'</span>';}).join('')+'</div>':'')+noteBlock(r)+'</article>'; }).join('') + (DONE.length>40?'<p class="hint rv">Showing the latest 40. Ask Tara to find older ones.</p>':'')
        : '<div class="empty card rv">Enquiries you reply to will show here.</div>');
   return '<div class="row between rv"><h1 class="h-title">Enquiries</h1><button type="button" class="chip press" data-tara="'+(pro()?'Who is waiting more than a day?':'Which enquiries are new?')+'">'+SPARK14+' Ask Tara</button></div>'
   + '<div class="seg rv" id="seg" data-v="'+state.seg+'"><span class="thumb"></span><button type="button" aria-pressed="'+(state.seg===0)+'" data-seg="0">Waiting · <span class="num">'+REQ.length+'</span></button><button type="button" aria-pressed="'+(state.seg===1)+'" data-seg="1">Contacted · <span class="num">'+DONE.length+'</span></button></div>'
-  + '<div class="list" id="list">'+list+'</div>';
+  + '<div class="sbar rv"><label class="sfield">'+ic('search',18)+'<input id="sq" type="search" inputmode="search" autocomplete="off" placeholder="Search name, phone or details" value="'+esc(state.q||'')+'" aria-label="Search enquiries"><button type="button" class="sx press" id="sx" aria-label="Clear search"'+(state.q?'':' hidden')+'>'+ic('x',14)+'</button></label>'
+  + '<div class="chips" id="when">'+[['all','All'],['today','Today'],['yday','Yesterday'],['week','Last 7 days'],['month','Last 30 days']].map(function(o){ return '<button type="button" class="pchip press" data-w="'+o[0]+'" aria-pressed="'+((state.when||'all')===o[0])+'">'+o[1]+'</button>'; }).join('')+'</div><div class="scount" id="scount" aria-live="polite">'+countText()+'</div></div>'
+  + '<div class="list" id="list">'+listHTML()+'</div>';
+}
+function countText(){ var f = !!(String(state.q||'').trim() || (state.when && state.when!=='all')); if (!f) return ''; var all = state.seg===0 ? REQ : DONE, n = all.filter(matchR).length; return 'Showing <b>'+n+'</b> of '+all.length+' '+(state.seg===0?'waiting':'contacted'); }
+function refreshList(){ var l=$('list'); if (!l) return; l.innerHTML = listHTML(); l.querySelectorAll('.rv').forEach(function(x){ x.classList.add('in'); }); bindSwipes();
+  var sc=$('scount'); if (sc) sc.innerHTML = countText(); var sx=$('sx'); if (sx) sx.hidden = !state.q;
+  if (!RM && l.animate) l.animate([{opacity:0.35},{opacity:1}], {duration:150, easing:'ease-out'}); }
+function saveNote(id){
+  var ta=$('noteIn'); if (!ta) return; var txt = ta.value.trim().slice(0,500);
+  var t = (D.tickets||[]).find(function(x){ return x.id===id; }); var old = t ? t.note : null;
+  if (t) { t.note = txt || null; t.note_at = new Date().toISOString(); } state.noteOpen = null; state.noteDraft = null; shapeTickets(); refreshList();
+  api({ action:'note', token:TOKEN, ticket_id:id, note:txt }, 15000).then(function(r){
+    if (r && r.ok) toast(txt ? 'Note saved' : 'Note removed');
+    else { if (t) t.note = old; shapeTickets(); refreshList(); toast(r && r.error==='offline' ? 'Couldn\'t connect. Note not saved.' : 'Couldn\'t save the note. Try again.'); }
+  });
 }
 function reqFX(scr){
   revealIn(scr); bindSwipes();
+  var sq=$('sq'), tq=null;
+  sq.addEventListener('input', function(){ clearTimeout(tq); tq=setTimeout(function(){ state.q=sq.value; refreshList(); }, 120); });
+  $('sx').addEventListener('click', function(){ sq.value=''; state.q=''; refreshList(); sq.focus(); });
+  $('when').addEventListener('click', function(e){ var b=e.target.closest('[data-w]'); if(!b) return; state.when=b.getAttribute('data-w'); $('when').querySelectorAll('[data-w]').forEach(function(x){ x.setAttribute('aria-pressed', x===b); }); refreshList(); });
+  $('list').addEventListener('input', function(e){ if (e.target.id==='noteIn') state.noteDraft=e.target.value; });
+  $('list').addEventListener('click', function(e){ var b;
+    if ((b=e.target.closest('[data-clear]'))) { state.q=''; state.when='all'; go('requests', true); return; }
+    if ((b=e.target.closest('[data-note]'))) { state.noteOpen=b.getAttribute('data-note'); state.noteDraft=null; refreshList(); var ta=$('noteIn'); if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); } return; }
+    if ((b=e.target.closest('[data-notecancel]'))) { state.noteOpen=null; refreshList(); return; }
+    if ((b=e.target.closest('[data-qn]'))) { var ta=$('noteIn'); if (ta) { var add=b.getAttribute('data-qn'); ta.value = ta.value.trim() ? ta.value.trim()+'. '+add : add; state.noteDraft=ta.value; ta.focus(); } return; }
+    if ((b=e.target.closest('[data-notesave]'))) { saveNote(b.getAttribute('data-notesave')); return; }
+  });
   $('seg').addEventListener('click', function(e){ var b=e.target.closest('[data-seg]'); if(!b) return; var v=+b.getAttribute('data-seg'); if(v===state.seg) return; state.seg=v; $('seg').setAttribute('data-v',v); $('seg').querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed', x===b);}); setTimeout(function(){ go('requests', true); }, 180); });
 }
 function bindSwipes(){
@@ -695,11 +826,11 @@ function insHTML(){
   var ringPct = cb.requests ? Math.round(cb.within_2h/cb.requests*100) : 0;
   var ring = '<section class="card rv ring"><svg width="96" height="96" viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="40" fill="none" stroke="var(--soft)" stroke-width="10"/><circle class="f" id="ringF" data-p="'+ringPct+'" cx="48" cy="48" r="40" fill="none" stroke="var(--lime2)" stroke-width="10" stroke-linecap="round" transform="rotate(-90 48 48)" stroke-dasharray="251.3" stroke-dashoffset="251.3"/><text x="48" y="54" text-anchor="middle" font-family="Urbanist, system-ui, sans-serif" font-weight="800" font-size="20" fill="#2B201E">'+(cb.requests?ringPct+'%':'–')+'</text></svg><div><b style="font-size:16px;display:block">Contacted within 2 hours</b><span class="muted" style="font-size:13px;font-weight:600">'+(cb.requests ? (cb.within_2h+' of '+cb.requests+' enquiries'+(cb.avg_hours!=null?' · average '+String(cb.avg_hours).replace(/\.0$/,'')+' hours':'')+'. Faster calls win more orders.') : 'No enquiries in this period yet.')+'</span></div></section>';
   // unanswered
-  var un = X.unanswered||[];
-  var unCard = '<section class="card dark rv"><div class="row between"><h2 style="font-size:16px">Tara couldn\'t answer</h2><span style="font-size:13px;font-weight:700;color:var(--lime)">'+un.length+' question'+(un.length===1?'':'s')+'</span></div>'
-    + (un.length ? un.slice(0,5).map(function(u){ return '<p style="margin:10px 0 0">“'+esc(u.question)+'”</p>'; }).join('') + '<p class="muted" style="margin:10px 0 0;font-size:13px">Send the answers to Amuwa on WhatsApp '+HELP+' and Tara learns them.</p>'
-       : '<p class="muted" style="margin:10px 0 0;font-size:13px">Tara answered every question in this period.</p>') + '</section>';
-  return head + kpis
+  var seenQ = {}, un = (X.unanswered||[]).filter(function(u){ var k=String(u.question||'').trim().toLowerCase(); if (!k || seenQ[k]) return false; seenQ[k]=1; return true; });
+  var unCard = '<section class="card rv teach"><div class="row between" style="align-items:flex-start"><div class="row" style="gap:10px;min-width:0"><span class="sp tface" aria-hidden="true"></span><div style="min-width:0"><h2 style="font-size:16px">Teach Tara</h2><span class="muted" style="font-size:13px">Questions visitors asked that she could not answer</span></div></div><span class="pill '+(un.length?'late':'new')+' num">'+un.length+'</span></div>'
+    + (un.length ? un.slice(0,6).map(function(u,i){ var open = state.ansOpen===i; return '<div class="uq'+(open?' open':'')+'" data-uq="'+i+'"><p class="q">“'+esc(u.question)+'”</p>'+(open?'<textarea id="ansIn" maxlength="600" rows="3" placeholder="Type the answer Tara should give your customers">'+esc(state.ansDraft||'')+'</textarea><div class="row" style="gap:8px;justify-content:space-between;align-items:center"><span class="muted" style="font-size:12px">Shown to customers on your website</span><span class="row" style="gap:8px"><button type="button" class="chip press" data-anscancel="1">Cancel</button><button type="button" class="chip dark press" data-anssave="'+i+'">'+ic('check',14,2.4)+' Save answer</button></span></div>':'<button type="button" class="chip lime press" data-ans="'+i+'">'+ic('note',14)+' Answer this</button>')+'<div class="learned" aria-hidden="true">'+ic('check',16,2.6)+' Tara learned this</div></div>'; }).join('')
+       : '<div class="allgood">'+ic('check',16,2.6)+' Tara answered every question in this period.</div>') + '</section>';
+  return head + weekCard() + kpis
    + '<section class="card rv"><div class="row between" style="margin-bottom:4px"><h2 style="font-size:16px">Website visits</h2>'+(pct!==null?'<span class="delta '+(pct>=0?'up':'down')+' num">'+(pct>=0?'▲ ':'▼ ')+Math.abs(pct)+'%</span>':'')+'</div><div class="legend" style="margin-bottom:8px"><span><i style="background:var(--ink)"></i>This period</span>'+(X.trend_prev&&X.trend_prev.length?'<span><i style="background:#CDB8AB"></i>Period before</span>':'')+'</div><div class="chart" id="chart"></div><p class="hint" style="text-align:left;margin:6px 0 0">Slide your finger on the chart to see each day</p></section>'
    + tapsCard
    + '<section class="card rv"><div class="row between"><h2 style="font-size:16px">Busiest days</h2>'+(wtop>=0?'<span class="pill new">'+WDN[wtop]+' is best</span>':'')+'</div><div style="margin-top:12px">'+days+'</div></section>'
@@ -735,12 +866,54 @@ function lineChart(X){
 }
 function insFX(scr, firstTime){
   revealIn(scr);
+  scr.addEventListener('input', function(e){ if (e.target.id==='ansIn') state.ansDraft=e.target.value; });
+  scr.addEventListener('click', function(e){ var b;
+    if ((b=e.target.closest('[data-ans]'))) { state.ansOpen=+b.getAttribute('data-ans'); state.ansDraft=''; go('insights', true); setTimeout(function(){ var t=$('ansIn'); if(t) t.focus(); }, 60); return; }
+    if ((b=e.target.closest('[data-anscancel]'))) { state.ansOpen=null; go('insights', true); return; }
+    if ((b=e.target.closest('[data-anssave]'))) { saveAnswer(+b.getAttribute('data-anssave'), b); return; }
+  });
   scr.querySelectorAll('[data-count]').forEach(function(el){ countUp(el, +el.getAttribute('data-count'), 700); });
   var io = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting){ showIn(en.target); io.unobserve(en.target); } }); }, {threshold:.35}) : null;
   function showIn(el){ el.classList.add('in'); if(el.id==='hours') el.querySelectorAll('i').forEach(function(i){ i.style.opacity=i.style.getPropertyValue('--o'); }); if(el.id==='ringF') el.style.strokeDashoffset=String(251.3*(1-(+el.getAttribute('data-p')||0)/100)); }
-  ['bub','days','hours','hbar','ringF'].forEach(function(id){ var el=$(id); if(!el) return; if(io) io.observe(el); else showIn(el); });
+  ['bub','days','hours','hbar','ringF','wbars'].forEach(function(id){ var el=$(id); if(!el) return; if(io) io.observe(el); else showIn(el); });
   if ($('chart')) mountChart();
   $('periods').addEventListener('click', function(e){ var b=e.target.closest('[data-p]'); if(!b||b.disabled) return; var p=+b.getAttribute('data-p'); if (p===state.period) return; state.period=p; if (p!==30 && !INS[p]) loadPeriod(p); go('insights', true); });
+}
+/* Pro: this week (last 7 days) against the 7 days before, from the 30-day data; Tara's tip comes from the Monday report */
+function weekCard(){
+  var tr = (D.trend||[]); if (tr.length < 14) return '';
+  var a = tr.slice(-7), b = tr.slice(-14,-7), sum = function(xs,k){ return xs.reduce(function(s,x){ return s+(x[k]||0); },0); };
+  var cut = function(n){ var d=new Date(); d.setHours(0,0,0,0); return d.getTime()-n*864e5; };
+  var enq = function(from, to){ return (D.tickets||[]).filter(function(t){ var c=new Date(t.created_at).getTime(); return c>=from && c<to; }).length; };
+  var va = sum(a,'visits'), vb = sum(b,'visits'), dv = vb ? Math.round((va-vb)/vb*100) : null;
+  var rows = [['Taps and actions', sum(a,'actions'), sum(b,'actions')], ['Enquiries', enq(cut(6), Date.now()+1), enq(cut(13), cut(6))]];
+  var mx = Math.max.apply(null, a.concat(b).map(function(x){ return x.visits||0; }).concat([1]));
+  var wdn = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var bars = a.map(function(x,i){ var p=b[i]||{}, dt=new Date(String(x.day).slice(0,10)+'T12:00:00Z');
+    return '<div class="wb'+(i===6?' today':'')+'"><div class="pair"><i class="t" style="height:'+Math.max(4,Math.round((x.visits||0)/mx*100))+'%;transition-delay:'+(RM?0:i*45)+'ms" title="'+nf(x.visits)+' visits"></i><i class="p" style="height:'+Math.max(4,Math.round((p.visits||0)/mx*100))+'%;transition-delay:'+(RM?0:i*45+20)+'ms" title="'+nf(p.visits)+' visits the week before"></i></div><span>'+(i===6?'Today':wdn[dt.getUTCDay()])+'</span></div>'; }).join('');
+  var tip = D.weekly && D.weekly.tip;
+  return '<section class="card rv wkcard"><div class="row between"><h2 style="font-size:16px">This week vs last week</h2><span class="muted" style="font-size:12px;font-weight:600">Last 7 days</span></div>'
+   + '<div class="wkhead"><b class="num" data-count="'+va+'">0</b><span>visits</span>'+(dv!==null?'<span class="delta '+(dv>=0?'up':'down')+' num">'+(dv>=0?'▲ ':'▼ ')+Math.abs(dv)+'%</span>':'')+'</div>'
+   + '<div class="legend"><span><i style="background:var(--ink)"></i>This week</span><span><i style="background:var(--lime)"></i>Week before</span></div>'
+   + '<div class="wbars" id="wbars" role="img" aria-label="Visits each day: '+a.map(function(x){ return nf(x.visits); }).join(', ')+'">'+bars+'</div>'
+   + '<div class="wkrows">'+rows.map(function(r){ var d = r[2] ? Math.round((r[1]-r[2])/r[2]*100) : null; return '<div class="wkr"><span>'+r[0]+'</span><b class="num">'+nf(r[1])+'</b><span class="muted num" style="font-size:12px">was '+nf(r[2])+'</span>'+(d!==null?'<span class="delta '+(d>=0?'up':'down')+' num">'+(d>=0?'▲ ':'▼ ')+Math.abs(d)+'%</span>':'<span></span>')+'</div>'; }).join('')+'</div>'
+   + (tip ? '<div class="wktip"><span class="sp tface" aria-hidden="true"></span><p><b>Tara\'s tip</b>'+esc(tip)+'</p></div>' : '')
+   + '</section>';
+}
+function saveAnswer(i, btn){
+  var X = insData(), seenQ = {}, un = (X.unanswered||[]).filter(function(u){ var k=String(u.question||'').trim().toLowerCase(); if (!k || seenQ[k]) return false; seenQ[k]=1; return true; });
+  var q = un[i] && un[i].question, a = ($('ansIn')||{}).value || '';
+  if (!q) return; if (a.trim().length < 2) { toast('Type the answer first'); return; }
+  btn.disabled = true; btn.textContent = 'Saving…';
+  api({ action:'answer', token:TOKEN, site_id:D.site.site_id, question:q, answer:a.trim() }, 15000).then(function(r){
+    if (r && r.ok) {
+      var box = btn.closest('.uq'); if (box) { box.classList.add('done'); }
+      var drop = function(o){ if (o && o.unanswered) o.unanswered = o.unanswered.filter(function(u){ return String(u.question||'').trim().toLowerCase() !== String(q).trim().toLowerCase(); }); };
+      state.ansOpen = null; state.ansDraft = '';
+      setTimeout(function(){ drop(D); Object.keys(INS).forEach(function(k){ drop(INS[k]); }); go('insights', true); }, RM ? 0 : 1100);
+      toast('Saved. Tara will answer this on your website now.');
+    } else { btn.disabled=false; btn.textContent='Save answer'; toast(r && r.error==='offline' ? 'Couldn\'t connect. Try again.' : 'Couldn\'t save. Try again.'); }
+  });
 }
 function loadPeriod(p){
   api({ action:'data', token:TOKEN, site_id:state.site, days:p }).then(function(r){
@@ -775,6 +948,10 @@ function accHTML(){
      : '<div class="mrow"><span class="ic">'+ic('store')+'</span><span class="tx"><b>Your business</b><small>'+esc(biz())+'</small></span></div>')
   + (url?'<a href="'+esc(url)+'" target="_blank" rel="noopener" class="mrow press"><span class="ic">'+ic('globe')+'</span><span class="tx"><b>Open my website</b><small>'+esc(String(url).replace(/^https?:\/\//,'').replace(/\/$/,''))+'</small></span>'+ic('arrow')+'</a>':'')
   + '<button type="button" class="mrow press" id="floatSw" role="switch" aria-checked="'+FLOAT+'"><span class="ic tface" aria-hidden="true"></span><span class="tx"><b>Floating Tara</b><small>'+(FLOAT?'On · hides while you touch the screen':'Off · tap Tara in the bottom bar')+'</small></span><span class="sw" aria-hidden="true"><i></i></span></button>'
+  + '</div><p class="mlabel rv">Emails from AI WebTara</p><div class="menu rv">'
+  + '<button type="button" class="mrow press" id="dailySw" role="switch" aria-checked="'+(!D.prefs||D.prefs.daily_email!==false)+'"><span class="ic">'+ic('mail')+'</span><span class="tx"><b>Morning summary email</b><small>Every day at 8:30 am · who is waiting, yesterday\'s visits</small></span><span class="sw" aria-hidden="true"><i></i></span></button>'
+  + (pro() ? '<button type="button" class="mrow press" id="weeklySw" role="switch" aria-checked="'+(!D.prefs||D.prefs.weekly_email!==false)+'"><span class="ic">'+ic('chart')+'</span><span class="tx"><b>Weekly report email</b><small>Every Monday at 9:10 am · your week with a tip from Tara</small></span><span class="sw" aria-hidden="true"><i></i></span></button>' : '')
+  + '</div><div class="menu rv">'
   + '<a class="mrow press" href="https://wa.me/'+HELP_WA+'" target="_blank" rel="noopener"><span class="ic">'+ic('wa')+'</span><span class="tx"><b>Help from Amuwa</b><small class="num">'+HELP+'</small></span>'+ic('arrow')+'</a></div>'
   + (!pro()?'<section class="card dark rv"><b style="font-size:16px">Get more with Pro</b><p class="muted" style="margin:6px 0 10px;font-size:13px">Full insights and Tara doing tasks for you.</p><span style="font-weight:700;color:var(--lime)">Call or WhatsApp '+HELP+'</span></section>':'')
   + '<button type="button" class="cta press rv" id="logout">'+ic('out')+'Log out</button>';
@@ -782,6 +959,10 @@ function accHTML(){
 function accFX(scr){
   revealIn(scr); scr.querySelectorAll('[data-count]').forEach(function(el){ countUp(el, +el.getAttribute('data-count'), 700); });
   scr.querySelectorAll('[data-site]').forEach(function(b){ b.addEventListener('click', function(){ var s=b.getAttribute('data-site'); if (s===state.site) return; flushPending(); state.site=s; setLS('amuwa_panel_site', s); D=null; INS={}; hist=[]; $('agMsgs').innerHTML=''; state.period=30; loadData({ home:true }); }); });
+  [['dailySw','daily_email'],['weeklySw','weekly_email']].forEach(function(p){ var el=$(p[0]); if (!el) return; el.addEventListener('click', function(){
+    var on = el.getAttribute('aria-checked')!=='true'; el.setAttribute('aria-checked', on); D.prefs = D.prefs||{}; D.prefs[p[1]] = on;
+    api({ action:'pref', token:TOKEN, key:p[1], on:on }, 15000).then(function(r){ if (r && r.ok) toast(on ? 'Email turned on' : 'Email turned off'); else { el.setAttribute('aria-checked', !on); D.prefs[p[1]] = !on; toast('Couldn\'t save. Try again.'); } });
+  }); });
   $('floatSw').addEventListener('click', function(){ FLOAT=!FLOAT; setLS('amuwa_panel_float', FLOAT?'on':'off'); this.setAttribute('aria-checked', FLOAT); this.querySelector('small').textContent = FLOAT?'On · hides while you touch the screen':'Off · tap Tara in the bottom bar'; setMascot(true); if (!FLOAT) { var pk=$('mxPeek'); if (pk) pk.hidden=true; } else if (window.__placeTara) setTimeout(window.__placeTara, 300); });
   $('logout').addEventListener('click', function(){ var b=this; b.disabled=true; b.textContent='Logging out…'; flushPending(); var tk=TOKEN; api({ action:'logout', token:tk }, 8000).then(function(){ signOut(); }); });
 }
