@@ -450,7 +450,8 @@ function pro(){ return !!(D && D.site && D.site.plan==='pro'); }
 function biz(){ return D && D.site ? D.site.name : ''; }
 function first(n){ return String(n||'').split(/\s+/)[0]; }
 function taps(t){ t=t||{}; return (t.calls||0)+(t.whatsapp||0)+(t.directions||0); }
-function within30(iso){ return Date.now()-new Date(iso).getTime() <= 30*864e5; }
+function SPAN(){ return (D && D.days) || 30; }
+function within30(iso){ return Date.now()-new Date(iso).getTime() <= SPAN()*864e5; }
 
 /* ---------- load ---------- */
 function loadData(opts){
@@ -566,8 +567,8 @@ function homeHTML(){
   + '<div><div style="font-size:12px;font-weight:600;color:var(--limeInk);margin-bottom:6px">Website visits this week: <b class="num">'+nf(weekVisits)+'</b> · tap a bar</div><div class="wk" id="wk">'+bars+'</div><div class="wkl" style="margin-top:6px">'+labels+'</div></div>'
   + (top?'<a class="cta press" href="'+telHref(top.phone)+'" data-callx="'+top.id+'">'+ic('phone')+'Call '+esc(first(top.name))+' first</a>':(REQ.length?'<button type="button" class="cta press" data-go="requests">See enquiries</button>':''))+'</section>'
   + '<div class="tiles">'
-  + tile(req30,'enquiries in<br>last 30 days',col('requests'),'requests')
-  + tile(D.totals.visits||0,'website visits<br>last 30 days',col('visits'),'insights')
+  + tile(req30,'enquiries in<br>last '+SPAN()+' days',col('requests'),'requests')
+  + tile(D.totals.visits||0,'website visits<br>last '+SPAN()+' days',col('visits'),'insights')
   + tile(taps(D.totals),'call, WhatsApp and<br>directions taps',col('taps'),'insights')
   + tile(D.totals.tara_chats||0,'chats with<br>Tara',col('chats'),'insights')+'</div>';
 }
@@ -661,8 +662,8 @@ document.addEventListener('click', function(e){
 var WDN = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 function insData(){ return state.period===30 || !pro() ? D : INS[state.period]; }
 function insHTML(){
-  var P = pro()?state.period:30, X = insData();
-  var periods = [7,30,90].map(function(n){ var dis=!pro() && n!==30; return '<button type="button" class="pchip press" data-p="'+n+'" aria-pressed="'+(n===P)+'"'+(dis?' disabled':'')+'>'+(dis?ic('lock',13):'')+'Last '+n+' days</button>'; }).join('');
+  var P = pro()?state.period:7, X = insData();
+  var periods = [7,30,90].map(function(n){ var dis=!pro() && n!==7; return '<button type="button" class="pchip press" data-p="'+n+'" aria-pressed="'+(n===P)+'"'+(dis?' disabled':'')+'>'+(dis?ic('lock',13):'')+'Last '+n+' days</button>'; }).join('');
   var head = '<div class="row between rv"><h1 class="h-title">Insights</h1>'+(pro()?'<button type="button" class="chip press" data-tara="Compare the last 7 days with the week before">'+SPARK14+' Ask Tara</button>':'')+'</div><div class="chips rv" id="periods">'+periods+'</div>';
   if (!X) return head + '<div class="kpis"><div class="sk" style="height:70px"></div><div class="sk" style="height:70px"></div><div class="sk" style="height:70px"></div></div><div class="sk" style="height:240px"></div><div class="sk" style="height:240px"></div>';
   var T = X.totals||{}, tp = taps(T);
@@ -672,7 +673,7 @@ function insHTML(){
   if (!pro()) {
     return head + kpis + tapsCard
      + '<section class="lockwrap rv"><div class="ghost"><div class="card" style="height:150px"></div><div class="card" style="height:120px"></div><div class="card dark" style="height:110px"></div></div>'
-     + '<div class="lk"><div class="lockcard"><div class="row"><span class="av" style="width:34px;height:34px;background:var(--ink);color:var(--lime)">'+ic('lock',16)+'</span><b style="font-size:16px">In the Pro plan</b></div><ul><li>Visits over time vs last period</li><li>Busiest days and hours</li><li>What customers ask for most</li><li>Questions Tara couldn\'t answer</li><li>Tara does tasks for you</li></ul><p class="muted" style="margin:0;font-size:13px">To upgrade, call or WhatsApp Amuwa on <b style="color:var(--ink)">'+HELP+'</b></p></div></div></section>';
+     + '<div class="lk"><div class="lockcard"><div class="row"><span class="av" style="width:34px;height:34px;background:var(--ink);color:var(--lime)">'+ic('lock',16)+'</span><b style="font-size:16px">In the Pro plan</b></div><ul><li>Last 30 and 90 days</li><li>Visits over time vs last period</li><li>Busiest days and hours</li><li>What customers ask for most</li><li>Questions Tara couldn\'t answer</li><li>Tara does tasks for you</li></ul><p class="muted" style="margin:0;font-size:13px">To upgrade, call or WhatsApp Amuwa on <b style="color:var(--ink)">'+HELP+'</b></p></div></div></section>';
   }
   var prevV = X.prev_totals ? X.prev_totals.visits : null;
   var pct = prevV ? Math.round(((T.visits||0)-prevV)/prevV*100) : null;
@@ -768,7 +769,7 @@ function accHTML(){
   var req30 = (D.tickets||[]).filter(function(t){ return within30(t.created_at); }).length;
   return '<h1 class="h-title rv">Account</h1>'
   + '<section class="hero rv" style="gap:12px"><div class="row" style="min-width:0">'+bizAv('width:52px;height:52px;font-size:20px')+'<div style="min-width:0"><b style="font-size:18px;display:block">'+esc(biz())+'</b><span style="font-size:13px;font-weight:600;color:var(--limeInk);word-break:break-all">'+esc(D.email||'')+'</span></div></div><div class="row" style="gap:8px;flex-wrap:wrap"><span class="pill" style="background:var(--ink);color:#fff">'+(pro()?'Pro':'Plus')+' plan</span>'+(url?'<span class="pill" style="background:rgba(255,255,255,.6)">Website live</span>':'')+'</div>'
-  + '<div class="kpis" style="margin-top:4px"><div class="kpi" style="background:rgba(255,255,255,.6)"><b class="num" data-count="'+(D.totals.visits||0)+'">0</b><span>visits</span></div><div class="kpi" style="background:rgba(255,255,255,.6)"><b class="num" data-count="'+req30+'">0</b><span>enquiries</span></div><div class="kpi" style="background:rgba(255,255,255,.6)"><b class="num" data-count="'+(D.totals.tara_chats||0)+'">0</b><span>Tara chats</span></div></div><span style="font-size:12px;font-weight:600;color:var(--limeInk)">Last 30 days</span></section>'
+  + '<div class="kpis" style="margin-top:4px"><div class="kpi" style="background:rgba(255,255,255,.6)"><b class="num" data-count="'+(D.totals.visits||0)+'">0</b><span>visits</span></div><div class="kpi" style="background:rgba(255,255,255,.6)"><b class="num" data-count="'+req30+'">0</b><span>enquiries</span></div><div class="kpi" style="background:rgba(255,255,255,.6)"><b class="num" data-count="'+(D.totals.tara_chats||0)+'">0</b><span>Tara chats</span></div></div><span style="font-size:12px;font-weight:600;color:var(--limeInk)">Last '+SPAN()+' days</span></section>'
   + '<div class="menu rv">'
   + (sites.length>1 ? sites.map(function(s){ var on=s.site_id===D.site.site_id; return '<button type="button" class="mrow press" data-site="'+esc(s.site_id)+'"'+(on?' aria-current="true"':'')+'><span class="ic"'+(on?' style="background:var(--lime)"':'')+'>'+ic('store')+'</span><span class="tx"><b>'+esc(s.name)+'</b><small>'+(s.plan==='pro'?'Pro':'Plus')+' plan'+(on?' · showing now':' · tap to switch')+'</small></span>'+(on?ic('check'):ic('chev'))+'</button>'; }).join('')
      : '<div class="mrow"><span class="ic">'+ic('store')+'</span><span class="tx"><b>Your business</b><small>'+esc(biz())+'</small></span></div>')
