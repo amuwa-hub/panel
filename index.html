@@ -427,6 +427,11 @@ mark{background:var(--lime);color:var(--ink);border-radius:4px;padding:0 2px}
 @media (prefers-reduced-motion:reduce){.spin{animation-duration:1.5s}}
 a.chip{text-decoration:none;color:var(--ink);display:inline-flex;align-items:center;gap:6px}
 .row.between>.chip{display:inline-flex;align-items:center;gap:6px}
+
+/* Edit my website: pick a part, then edit it on its own screen */
+.erow{min-height:76px;gap:10px}
+.erow+.erow{border-top:1px solid var(--line);border-radius:0}
+.erow .tx small{white-space:normal}
 </style>
 </head>
 <body class="panel">
@@ -1004,19 +1009,20 @@ function accHTML(){
 }
 function accFX(scr){
   revealIn(scr); scr.querySelectorAll('[data-count]').forEach(function(el){ countUp(el, +el.getAttribute('data-count'), 700); });
-  scr.querySelectorAll('[data-site]').forEach(function(b){ b.addEventListener('click', function(){ var s=b.getAttribute('data-site'); if (s===state.site) return; flushPending(); state.site=s; setLS('amuwa_panel_site', s); D=null; INS={}; SITE=null; hist=[]; $('agMsgs').innerHTML=''; state.period=30; loadData({ home:true }); }); });
+  scr.querySelectorAll('[data-site]').forEach(function(b){ b.addEventListener('click', function(){ var s=b.getAttribute('data-site'); if (s===state.site) return; flushPending(); state.site=s; setLS('amuwa_panel_site', s); D=null; INS={}; SITE=null; SPART=null; hist=[]; $('agMsgs').innerHTML=''; state.period=30; loadData({ home:true }); }); });
   [['dailySw','daily_email'],['weeklySw','weekly_email']].forEach(function(p){ var el=$(p[0]); if (!el) return; el.addEventListener('click', function(){
     var on = el.getAttribute('aria-checked')!=='true'; el.setAttribute('aria-checked', on); D.prefs = D.prefs||{}; D.prefs[p[1]] = on;
     api({ action:'pref', token:TOKEN, key:p[1], on:on }, 15000).then(function(r){ if (r && r.ok) toast(on ? 'Email turned on' : 'Email turned off'); else { el.setAttribute('aria-checked', !on); D.prefs[p[1]] = !on; toast('Couldn\'t save. Try again.'); } });
   }); });
-  $('goSite').addEventListener('click', function(){ go('site'); });
+  $('goSite').addEventListener('click', function(){ SPART=null; go('site'); });
   $('floatSw').addEventListener('click', function(){ FLOAT=!FLOAT; setLS('amuwa_panel_float', FLOAT?'on':'off'); this.setAttribute('aria-checked', FLOAT); this.querySelector('small').textContent = FLOAT?'On · hides while you touch the screen':'Off · tap Tara in the bottom bar'; setMascot(true); if (!FLOAT) { var pk=$('mxPeek'); if (pk) pk.hidden=true; } else if (window.__placeTara) setTimeout(window.__placeTara, 300); });
   $('logout').addEventListener('click', function(){ var b=this; b.disabled=true; b.textContent='Logging out…'; flushPending(); var tk=TOKEN; api({ action:'logout', token:tk }, 8000).then(function(){ signOut(); }); });
 }
-function signOut(msg){ SITE=null; TOKEN=null; setLS('amuwa_panel_token',null); D=null; INS={}; REQ=[]; DONE=[]; hist=[]; $('agMsgs').innerHTML=''; closeTara(); showLogin(msg); }
+function signOut(msg){ SITE=null; SPART=null; TOKEN=null; setLS('amuwa_panel_token',null); D=null; INS={}; REQ=[]; DONE=[]; hist=[]; $('agMsgs').innerHTML=''; closeTara(); showLogin(msg); }
 
 /* EDIT MY WEBSITE: owner changes that show on the live website within seconds (no rebuild) */
-var SITE = null;
+var SITE = null, SPART = null;
+function sitePart(p, back){ SPART=p; state.screen='site'; renderNav(); render(back); window.scrollTo({top:0, behavior:'instant'}); }
 function todayISO(){ var d=new Date(Date.now()+330*60000); return d.toISOString().slice(0,10); }
 function fmtD(iso){ if(!iso) return ''; var d=new Date(iso+'T12:00:00Z'); return d.getUTCDate()+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getUTCMonth()]; }
 function loadSite(){ api({ action:'site_get', token:TOKEN, site_id:D.site.site_id }, 15000).then(function(r){
@@ -1026,9 +1032,9 @@ function loadSite(){ api({ action:'site_get', token:TOKEN, site_id:D.site.site_i
 }); }
 function livePill(on, txt){ return '<span class="pill '+(on?'live':'off')+'">'+(on?'<i class="dot"></i>':'')+esc(txt)+'</span>'; }
 function siteHTML(){
-  var head = '<div class="row between rv"><button type="button" class="chip press" id="siteBack">'+ic('back',16)+' Account</button>'+(D.site.live_url?'<a class="chip press" href="'+esc(D.site.live_url)+'" target="_blank" rel="noopener">'+ic('globe',15)+' Open website</a>':'')+'</div>'
-   + '<div class="rv"><h1 class="h-title" style="margin-top:6px">Edit my website</h1><p class="muted" style="margin:4px 0 0;font-size:14px">Changes show on your website within seconds. Tara uses them too.</p></div>';
-  if (!SITE) return head + '<div class="sk" style="height:170px;border-radius:24px"></div><div class="sk" style="height:170px;border-radius:24px"></div><div class="sk" style="height:220px;border-radius:24px"></div>';
+  var head = '<div class="row between rv"><button type="button" class="chip press" id="siteBack">'+ic('back',16)+(SPART?' Edit my website':' Account')+'</button>'+(D.site.live_url?'<a class="chip press" href="'+esc(D.site.live_url)+'" target="_blank" rel="noopener">'+ic('globe',15)+' Open website</a>':'')+'</div>'
+   + (SPART ? '' : '<div class="rv"><h1 class="h-title" style="margin-top:6px">Edit my website</h1><p class="muted" style="margin:4px 0 0;font-size:14px">Pick what you want to change. Changes show on your website within seconds, and Tara uses them too.</p></div>');
+  if (!SITE) return head + (SPART ? '<div class="sk" style="height:320px;border-radius:24px"></div>' : '<div class="sk" style="height:200px;border-radius:24px"></div>');
   var t = todayISO(), S = SITE;
   var offerOn = !!S.offer_text && (!S.offer_until || S.offer_until >= t);
   var noticeOn = !!S.notice_text && (!S.notice_until || S.notice_until >= t);
@@ -1048,11 +1054,21 @@ function siteHTML(){
     + '<div class="two"><div><label class="fl" for="fPhone">Call number</label><input class="field num" id="fPhone" inputmode="tel" maxlength="16" placeholder="10-digit mobile" value="'+esc(S.phone||'')+'"></div><div><label class="fl" for="fWa">WhatsApp number</label><input class="field num" id="fWa" inputmode="tel" maxlength="16" placeholder="10-digit mobile" value="'+esc(S.whatsapp||'')+'"></div></div>'
     + '<label class="fl" for="fAddr">Address</label><textarea class="field" id="fAddr" rows="2" maxlength="240" placeholder="Shop number, area, city">'+esc(S.address||'')+'</textarea>'
     + '<div class="eact"><span></span><button type="button" class="cta press" data-save="details">'+ic('check',16,2.4)+'Save timings and contact</button></div></section>';
-  return head + offer + notice + details;
+  if (SPART==='offer') return head + offer;
+  if (SPART==='notice') return head + notice;
+  if (SPART==='details') return head + details;
+  var detSet = [S.hours, S.phone, S.whatsapp, S.address].filter(Boolean).length;
+  var row = function(p, icn, icStyle, title, sub, status, on){ return '<button type="button" class="mrow press erow" data-part="'+p+'"><span class="ic" style="'+icStyle+'">'+ic(icn,18)+'</span><span class="tx"><b>'+title+'</b><small>'+sub+'</small></span>'+livePill(on, status)+ic('chev')+'</button>'; };
+  return head + '<div class="menu rv">'
+    + row('offer','tag','background:var(--lime);color:var(--ink)','Offer strip','A thin strip at the top of your website', offerOn?(S.offer_until?'Till '+fmtD(S.offer_until):'Live'):'Off', offerOn)
+    + row('notice','closed','background:var(--alert);color:var(--alertInk)','Closed notice','Holidays, festivals or changed timings', noticeOn?'Set':'Off', noticeOn)
+    + row('details','clock','','Timings and contact','Hours, call and WhatsApp numbers, address', detSet?'Updated':'Not changed', !!detSet)
+    + '</div>';
 }
 function siteFX(scr){
   revealIn(scr);
-  $('siteBack').addEventListener('click', function(){ go('account'); });
+  $('siteBack').addEventListener('click', function(){ if (SPART) sitePart(null, true); else go('account'); });
+  scr.querySelectorAll('[data-part]').forEach(function(b){ b.addEventListener('click', function(){ sitePart(b.getAttribute('data-part'), false); }); });
   if (!SITE) { loadSite(); return; }
   var bindCount = function(inp, cnt, prev){ var i=$(inp); if(!i) return; i.addEventListener('input', function(){ $(cnt).textContent=i.value.length; if (prev) $(prev).textContent = i.value || 'Your offer appears here'; }); };
   bindCount('fOffer','nOffer','pOffer'); bindCount('fNotice','nNotice');
@@ -1075,7 +1091,7 @@ function saveSite(part, btn, clear){
       if (part==='details') { SITE.hours=data.hours||null; SITE.phone=data.phone?data.phone.slice(-10):null; SITE.whatsapp=data.whatsapp?data.whatsapp.slice(-10):null; SITE.address=data.address||null; }
       btn.innerHTML=ic('check',16,2.6)+(clear?'Removed':'Live on your website'); btn.classList.add('ok');
       toast(clear ? 'Removed from your website' : 'Saved. Live on your website now.');
-      setTimeout(function(){ if (state.screen==='site') go('site', true); }, RM?300:1200);
+      setTimeout(function(){ if (state.screen==='site') sitePart(null, true); }, RM?300:1200);
     } else {
       btn.innerHTML=label;
       toast(r && r.error==='past_date' ? 'Pick today or a later date' : r && r.error==='offline' ? 'Couldn\'t connect. Try again.' : 'Couldn\'t save. Try again.');
