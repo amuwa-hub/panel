@@ -424,18 +424,7 @@ mark{background:var(--lime);color:var(--ink);border-radius:4px;padding:0 2px}
 .ghostsite{display:flex;flex-direction:column;gap:6px;padding:10px 12px 12px}
 .ghostsite i{display:block;height:8px;border-radius:999px;background:var(--line)}
 .ghostsite i:nth-child(1){width:55%;height:12px}.ghostsite i:nth-child(2){width:85%}.ghostsite i:nth-child(3){width:70%}
-/* services list editor */
-.svcl{display:flex;flex-direction:column;gap:8px}
-.svc{display:flex;gap:8px;align-items:flex-start;background:var(--soft);border-radius:16px;padding:8px}
-.svc.newrow{animation:edIn .2s var(--ease-out)}
-.svcf{flex:1;min-width:0;display:grid;grid-template-columns:1.6fr 1fr;gap:6px}
-.svcf .field{min-height:42px;padding:8px 12px;font-size:14px;background:var(--card)}
-.svcf [data-k=note]{grid-column:1 / -1}
-.svcx{flex:0 0 auto;width:36px;height:36px;margin-top:3px;border-radius:999px;border:0;background:var(--card);color:var(--muted);display:grid;place-items:center;cursor:pointer}
-.addrow{display:flex;align-items:center;justify-content:center;gap:6px;min-height:46px;border-radius:16px;border:1.5px dashed var(--lime2);background:none;font:inherit;font-weight:700;color:var(--limeInk);cursor:pointer}
-.lockedc{background:linear-gradient(160deg,var(--soft),var(--card))}
-.svcx:active,.addrow:active{transform:scale(.96)}
-@media (prefers-reduced-motion:reduce){.svc.newrow{animation:none}.spin{animation-duration:1.5s}}
+@media (prefers-reduced-motion:reduce){.spin{animation-duration:1.5s}}
 a.chip{text-decoration:none;color:var(--ink);display:inline-flex;align-items:center;gap:6px}
 .row.between>.chip{display:inline-flex;align-items:center;gap:6px}
 </style>
@@ -1004,7 +993,7 @@ function accHTML(){
      : '<div class="mrow"><span class="ic">'+ic('store')+'</span><span class="tx"><b>Your business</b><small>'+esc(biz())+'</small></span></div>')
   + (url?'<a href="'+esc(url)+'" target="_blank" rel="noopener" class="mrow press"><span class="ic">'+ic('globe')+'</span><span class="tx"><b>Open my website</b><small>'+esc(String(url).replace(/^https?:\/\//,'').replace(/\/$/,''))+'</small></span>'+ic('arrow')+'</a>':'')
   + '<button type="button" class="mrow press" id="floatSw" role="switch" aria-checked="'+FLOAT+'"><span class="ic tface" aria-hidden="true"></span><span class="tx"><b>Floating Tara</b><small>'+(FLOAT?'On · hides while you touch the screen':'Off · tap Tara in the bottom bar')+'</small></span><span class="sw" aria-hidden="true"><i></i></span></button>'
-  + '</div><p class="mlabel rv">Your website</p><div class="menu rv"><button type="button" class="mrow press" id="goSite"><span class="ic" style="background:var(--lime);color:var(--ink)">'+ic('edit')+'</span><span class="tx"><b>Edit my website</b><small>Offer, closed days, timings, contact'+(pro()?', prices':'')+'</small></span>'+ic('chev')+'</button>'
+  + '</div><p class="mlabel rv">Your website</p><div class="menu rv"><button type="button" class="mrow press" id="goSite"><span class="ic" style="background:var(--lime);color:var(--ink)">'+ic('edit')+'</span><span class="tx"><b>Edit my website</b><small>Offer, closed days, timings, contact</small></span>'+ic('chev')+'</button>'
   + '</div><p class="mlabel rv">Emails from AI WebTara</p><div class="menu rv">'
   + '<button type="button" class="mrow press" id="dailySw" role="switch" aria-checked="'+(!D.prefs||D.prefs.daily_email!==false)+'"><span class="ic">'+ic('mail')+'</span><span class="tx"><b>Morning summary email</b><small>Every day at 8:30 am · who is waiting, yesterday\'s visits</small></span><span class="sw" aria-hidden="true"><i></i></span></button>'
   + (pro() ? '<button type="button" class="mrow press" id="weeklySw" role="switch" aria-checked="'+(!D.prefs||D.prefs.weekly_email!==false)+'"><span class="ic">'+ic('chart')+'</span><span class="tx"><b>Weekly report email</b><small>Every Monday at 9:10 am · your week with a tip from Tara</small></span><span class="sw" aria-hidden="true"><i></i></span></button>' : '')
@@ -1015,7 +1004,7 @@ function accHTML(){
 }
 function accFX(scr){
   revealIn(scr); scr.querySelectorAll('[data-count]').forEach(function(el){ countUp(el, +el.getAttribute('data-count'), 700); });
-  scr.querySelectorAll('[data-site]').forEach(function(b){ b.addEventListener('click', function(){ var s=b.getAttribute('data-site'); if (s===state.site) return; flushPending(); state.site=s; setLS('amuwa_panel_site', s); D=null; INS={}; SITE=null; SVC=null; hist=[]; $('agMsgs').innerHTML=''; state.period=30; loadData({ home:true }); }); });
+  scr.querySelectorAll('[data-site]').forEach(function(b){ b.addEventListener('click', function(){ var s=b.getAttribute('data-site'); if (s===state.site) return; flushPending(); state.site=s; setLS('amuwa_panel_site', s); D=null; INS={}; SITE=null; hist=[]; $('agMsgs').innerHTML=''; state.period=30; loadData({ home:true }); }); });
   [['dailySw','daily_email'],['weeklySw','weekly_email']].forEach(function(p){ var el=$(p[0]); if (!el) return; el.addEventListener('click', function(){
     var on = el.getAttribute('aria-checked')!=='true'; el.setAttribute('aria-checked', on); D.prefs = D.prefs||{}; D.prefs[p[1]] = on;
     api({ action:'pref', token:TOKEN, key:p[1], on:on }, 15000).then(function(r){ if (r && r.ok) toast(on ? 'Email turned on' : 'Email turned off'); else { el.setAttribute('aria-checked', !on); D.prefs[p[1]] = !on; toast('Couldn\'t save. Try again.'); } });
@@ -1024,14 +1013,14 @@ function accFX(scr){
   $('floatSw').addEventListener('click', function(){ FLOAT=!FLOAT; setLS('amuwa_panel_float', FLOAT?'on':'off'); this.setAttribute('aria-checked', FLOAT); this.querySelector('small').textContent = FLOAT?'On · hides while you touch the screen':'Off · tap Tara in the bottom bar'; setMascot(true); if (!FLOAT) { var pk=$('mxPeek'); if (pk) pk.hidden=true; } else if (window.__placeTara) setTimeout(window.__placeTara, 300); });
   $('logout').addEventListener('click', function(){ var b=this; b.disabled=true; b.textContent='Logging out…'; flushPending(); var tk=TOKEN; api({ action:'logout', token:tk }, 8000).then(function(){ signOut(); }); });
 }
-function signOut(msg){ SITE=null; SVC=null; TOKEN=null; setLS('amuwa_panel_token',null); D=null; INS={}; REQ=[]; DONE=[]; hist=[]; $('agMsgs').innerHTML=''; closeTara(); showLogin(msg); }
+function signOut(msg){ SITE=null; TOKEN=null; setLS('amuwa_panel_token',null); D=null; INS={}; REQ=[]; DONE=[]; hist=[]; $('agMsgs').innerHTML=''; closeTara(); showLogin(msg); }
 
 /* EDIT MY WEBSITE: owner changes that show on the live website within seconds (no rebuild) */
-var SITE = null, SVC = null;
+var SITE = null;
 function todayISO(){ var d=new Date(Date.now()+330*60000); return d.toISOString().slice(0,10); }
 function fmtD(iso){ if(!iso) return ''; var d=new Date(iso+'T12:00:00Z'); return d.getUTCDate()+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getUTCMonth()]; }
 function loadSite(){ api({ action:'site_get', token:TOKEN, site_id:D.site.site_id }, 15000).then(function(r){
-  if (r && r.ok) { SITE=r; SVC=(r.services||[]).map(function(x){ return {name:x.name||'', price:x.price||'', note:x.note||''}; }); if (state.screen==='site') go('site', true); }
+  if (r && r.ok) { SITE=r; if (state.screen==='site') go('site', true); }
   else if (r && r.error==='login') { TOKEN=null; setLS('amuwa_panel_token',null); showLogin('Please log in again.'); }
   else { toast('Couldn\'t load. Check your internet.'); }
 }); }
@@ -1059,19 +1048,8 @@ function siteHTML(){
     + '<div class="two"><div><label class="fl" for="fPhone">Call number</label><input class="field num" id="fPhone" inputmode="tel" maxlength="16" placeholder="10-digit mobile" value="'+esc(S.phone||'')+'"></div><div><label class="fl" for="fWa">WhatsApp number</label><input class="field num" id="fWa" inputmode="tel" maxlength="16" placeholder="10-digit mobile" value="'+esc(S.whatsapp||'')+'"></div></div>'
     + '<label class="fl" for="fAddr">Address</label><textarea class="field" id="fAddr" rows="2" maxlength="240" placeholder="Shop number, area, city">'+esc(S.address||'')+'</textarea>'
     + '<div class="eact"><span></span><button type="button" class="cta press" data-save="details">'+ic('check',16,2.4)+'Save timings and contact</button></div></section>';
-  var services;
-  if (pro()) {
-    services = '<section class="card rv ecard" id="cSvc"><div class="ehead"><span class="eic" style="background:var(--ink);color:var(--lime)">'+ic('menu2',18)+'</span><div><h2>Services and prices</h2><span class="muted">Shown as a price list on your website</span></div>'+livePill((SVC||[]).some(function(x){return x.name.trim();}), (SVC||[]).filter(function(x){return x.name.trim();}).length+' items')+'</div>'
-     + '<div class="svcl" id="svcList">'+svcRows()+'</div>'
-     + '<button type="button" class="addrow press" id="svcAdd">'+ic('plus',16)+' Add a service</button>'
-     + '<div class="eact"><span class="muted" style="font-size:12px">Up to 40 items</span><button type="button" class="cta press" data-save="services">'+ic('check',16,2.4)+'Save price list</button></div></section>';
-  } else {
-    services = '<section class="card rv ecard lockedc"><div class="ehead"><span class="eic" style="background:var(--ink);color:var(--lime)">'+ic('lock',18)+'</span><div><h2>Services and prices</h2><span class="muted">Keep a price list on your website and let Tara quote it</span></div><span class="pill new">Pro</span></div><p class="muted" style="margin:8px 0 0;font-size:14px">Part of the Pro plan. To upgrade, call or WhatsApp Amuwa on <b style="color:var(--ink)">'+HELP+'</b>.</p></section>';
-  }
-  return head + offer + notice + details + services;
+  return head + offer + notice + details;
 }
-function svcRows(){ var L=(SVC&&SVC.length)?SVC:[{name:'',price:'',note:''}]; if(!SVC||!SVC.length) SVC=L;
-  return L.map(function(x,i){ return '<div class="svc" data-i="'+i+'"><div class="svcf"><input class="field" data-k="name" maxlength="60" placeholder="Service or item" value="'+esc(x.name)+'"><input class="field num" data-k="price" maxlength="30" placeholder="Price e.g. ₹850" value="'+esc(x.price)+'"><input class="field" data-k="note" maxlength="80" placeholder="Note (optional)" value="'+esc(x.note)+'"></div><button type="button" class="svcx press" data-rm="'+i+'" aria-label="Remove '+esc(x.name||'item')+'">'+ic('x',15)+'</button></div>'; }).join(''); }
 function siteFX(scr){
   revealIn(scr);
   $('siteBack').addEventListener('click', function(){ go('account'); });
@@ -1080,13 +1058,6 @@ function siteFX(scr){
   bindCount('fOffer','nOffer','pOffer'); bindCount('fNotice','nNotice');
   var ou=$('fOfferU'); if (ou) ou.addEventListener('change', function(){ $('pOfferU').textContent = ou.value ? 'till '+fmtD(ou.value) : ''; });
   if ($('qNotice')) $('qNotice').addEventListener('click', function(e){ var b=e.target.closest('[data-nq]'); if(!b) return; var f=$('fNotice'); f.value=b.getAttribute('data-nq'); $('nNotice').textContent=f.value.length; f.focus(); });
-  var sl=$('svcList');
-  if (sl) {
-    sl.addEventListener('input', function(e){ var row=e.target.closest('.svc'); if(!row) return; SVC[+row.getAttribute('data-i')][e.target.getAttribute('data-k')] = e.target.value; });
-    sl.addEventListener('click', function(e){ var b=e.target.closest('[data-rm]'); if(!b) return; var i=+b.getAttribute('data-rm'), row=b.closest('.svc');
-      var done=function(){ SVC.splice(i,1); sl.innerHTML=svcRows(); }; if (RM||!row.animate) done(); else row.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateX(12px)'}],{duration:160,easing:'ease-out'}).onfinish=done; });
-    $('svcAdd').addEventListener('click', function(){ if (SVC.length>=40) { toast('Up to 40 items'); return; } SVC.push({name:'',price:'',note:''}); sl.insertAdjacentHTML('beforeend', svcRows().split('<div class="svc"').slice(-1).map(function(h){ return '<div class="svc newrow"'+h; })[0]); var ins=sl.querySelectorAll('.svc'); ins[ins.length-1].querySelector('input').focus(); });
-  }
   scr.addEventListener('click', function(e){ var b=e.target.closest('[data-save]'), c=e.target.closest('[data-clear]'); if (b) saveSite(b.getAttribute('data-save'), b); if (c) saveSite(c.getAttribute('data-clear'), c, true); });
 }
 function saveSite(part, btn, clear){
@@ -1095,7 +1066,6 @@ function saveSite(part, btn, clear){
   if (part==='notice') { data = clear ? {text:''} : {text:v('fNotice').trim(), from:v('fNoticeF')||null, until:v('fNoticeU')||null}; if (!clear && !data.text) { toast('Type the notice first'); $('fNotice').focus(); return; } if (data.until && data.from && data.until < data.from) { toast('The till date is before the from date'); return; } if (data.until && data.until < t) { toast('Pick today or a later date'); return; } }
   if (part==='details') { var ph=v('fPhone').replace(/\D/g,''), wa=v('fWa').replace(/\D/g,''); var okN=function(n){ return !n || /^(91)?[6-9]\d{9}$/.test(n); };
     if (!okN(ph) || !okN(wa)) { toast('Enter a 10-digit mobile number'); return; } data = {hours:v('fHours').trim(), phone:ph, whatsapp:wa, address:v('fAddr').trim()}; }
-  if (part==='services') { data = {items:(SVC||[]).filter(function(x){ return x.name.trim(); })}; }
   var label = btn.innerHTML; btn.disabled=true; btn.classList.add('busy'); btn.innerHTML='<span class="spin"></span>Saving…';
   api({ action:'site_save', token:TOKEN, site_id:D.site.site_id, part:part, data:data }, 15000).then(function(r){
     btn.disabled=false; btn.classList.remove('busy');
@@ -1103,13 +1073,12 @@ function saveSite(part, btn, clear){
       if (part==='offer') { SITE.offer_text=data.text||null; SITE.offer_until=data.text?data.until:null; }
       if (part==='notice') { SITE.notice_text=data.text||null; SITE.notice_from=data.text?data.from:null; SITE.notice_until=data.text?data.until:null; }
       if (part==='details') { SITE.hours=data.hours||null; SITE.phone=data.phone?data.phone.slice(-10):null; SITE.whatsapp=data.whatsapp?data.whatsapp.slice(-10):null; SITE.address=data.address||null; }
-      if (part==='services') { SITE.services=data.items; SVC=data.items.slice(); }
       btn.innerHTML=ic('check',16,2.6)+(clear?'Removed':'Live on your website'); btn.classList.add('ok');
       toast(clear ? 'Removed from your website' : 'Saved. Live on your website now.');
       setTimeout(function(){ if (state.screen==='site') go('site', true); }, RM?300:1200);
     } else {
       btn.innerHTML=label;
-      toast(r && r.error==='pro_only' ? 'Services and prices are part of Pro' : r && r.error==='past_date' ? 'Pick today or a later date' : r && r.error==='offline' ? 'Couldn\'t connect. Try again.' : 'Couldn\'t save. Try again.');
+      toast(r && r.error==='past_date' ? 'Pick today or a later date' : r && r.error==='offline' ? 'Couldn\'t connect. Try again.' : 'Couldn\'t save. Try again.');
     }
   });
 }

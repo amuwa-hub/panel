@@ -1,5 +1,5 @@
 /* AI WebTara · live website details set by the owner in the panel (offer strip, closed notice,
-   timings, call/WhatsApp numbers, address, services and prices). Loaded on every website by the Builder.
+   timings, call/WhatsApp numbers and address). Loaded on every website by the Builder.
    Reads only public data (site_live) with the site's public key. Never blocks the page; does nothing on previews. */
 (function () {
   'use strict';
@@ -24,11 +24,6 @@
       '.wt-txt{flex:1;min-width:0}.wt-txt small{opacity:.75;font-weight:600;margin-left:6px;white-space:nowrap}' +
       '.wt-x{flex:0 0 auto;width:30px;height:30px;border:0;border-radius:999px;background:rgba(255,255,255,.16);color:inherit;font:700 16px/1 system-ui;cursor:pointer;display:grid;place-items:center}' +
       '.wt-bar.notice .wt-x{background:rgba(162,58,28,.12)}' +
-      '.wt-svc{padding:56px max(16px,env(safe-area-inset-left,0px));max-width:760px;margin:0 auto;box-sizing:border-box}' +
-      '.wt-svc h2{margin:0 0 16px;font-size:clamp(24px,5vw,34px);line-height:1.15}' +
-      '.wt-svc ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}' +
-      '.wt-svc li{display:grid;grid-template-columns:1fr auto;gap:4px 16px;align-items:baseline;padding:14px 0;border-bottom:1px solid rgba(127,127,127,.25)}' +
-      '.wt-svc li b{font-size:17px}.wt-svc li span.p{font-weight:800;white-space:nowrap}.wt-svc li small{grid-column:1/-1;opacity:.72}' +
       '@keyframes wtIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}' +
       '@media (prefers-reduced-motion:reduce){.wt-bar{animation:none}.wt-bars{transition:opacity .2s}}';
     document.head.appendChild(s);
@@ -73,23 +68,10 @@
     }
   }
 
-  function services(list) {
-    if (!list || !list.length) return;
-    var html = '<ul>' + list.map(function (x) { return '<li><b>' + esc(x.name) + '</b>' + (x.price ? '<span class="p">' + esc(x.price) + '</span>' : '<span></span>') + (x.note ? '<small>' + esc(x.note) + '</small>' : '') + '</li>'; }).join('') + '</ul>';
-    var slot = document.querySelector('[data-wt="services"]');
-    css();
-    if (slot) { slot.classList.add('wt-svc-slot'); slot.innerHTML = html; slot.classList.add('wt-svc'); return; }
-    var sec = document.createElement('section'); sec.className = 'wt-svc'; sec.id = 'prices'; sec.setAttribute('aria-label', 'Prices');
-    sec.innerHTML = '<h2>Prices</h2>' + html;
-    var foot = document.querySelector('footer');
-    if (foot && foot.parentNode) foot.parentNode.insertBefore(sec, foot); else (document.querySelector('main') || document.body).appendChild(sec);
-  }
-
   function run(d) {
     if (!d || typeof d !== 'object') return;
     try { bars(d); } catch (e) {}
     try { details(d); } catch (e) {}
-    try { services(d.services); } catch (e) {}
     try { document.dispatchEvent(new CustomEvent('site:live', { detail: d })); } catch (e) {}
   }
 
