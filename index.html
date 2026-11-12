@@ -432,6 +432,20 @@ a.chip{text-decoration:none;color:var(--ink);display:inline-flex;align-items:cen
 .erow{min-height:76px;gap:10px}
 .erow+.erow{border-top:1px solid var(--line);border-radius:0}
 .erow .tx small{white-space:normal}
+
+/* Write with Tara (offer strip) */
+.twrite{border-radius:18px;background:linear-gradient(160deg,var(--limeT),var(--card));border:1px solid var(--line)}
+.twbtn{display:flex;align-items:center;gap:10px;width:100%;min-height:60px;padding:8px 12px;border:0;background:none;font:inherit;color:inherit;text-align:left;cursor:pointer;border-radius:18px}
+.twbtn .tx{flex:1;min-width:0}.twbtn b{display:block;font-size:15px}.twbtn small{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.twbtn .sp{width:36px;height:36px;flex:0 0 auto}
+.twch{transition:transform .2s var(--ease-out);display:grid}.twbtn[aria-expanded=true] .twch{transform:rotate(90deg)}
+.twbody{display:flex;flex-direction:column;gap:10px;padding:0 12px 12px}
+.twbody .qn .chip[aria-pressed=true]{background:var(--ink);color:#fff}
+#twOut{display:flex;flex-direction:column;gap:8px}
+.twopt{text-align:left;font:inherit;font-weight:700;font-size:14px;line-height:1.35;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;min-height:48px;cursor:pointer;animation:edIn .22s var(--ease-out) both}
+.twopt:nth-child(3){animation-delay:.05s}.twopt:nth-child(4){animation-delay:.1s}
+@media (hover:hover) and (pointer:fine){.twopt:hover{border-color:var(--lime2)}}
+@media (prefers-reduced-motion:reduce){.twopt{animation:none}.twch{transition:none}}
 </style>
 </head>
 <body class="panel">
@@ -485,6 +499,7 @@ var RM = false; try { RM = window.matchMedia('(prefers-reduced-motion: reduce)')
 var $ = function(id){ return document.getElementById(id); };
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
 var I = {
+  spark:'<path d="M12 3l1.8 4.6L18.5 9l-4.7 1.4L12 15l-1.8-4.6L5.5 9l4.7-1.4z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/>',
   tag:'<path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
   closed:'<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>',
   clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
@@ -1040,6 +1055,11 @@ function siteHTML(){
   var noticeOn = !!S.notice_text && (!S.notice_until || S.notice_until >= t);
   var offer = '<section class="card rv ecard" id="cOffer"><div class="ehead"><span class="eic" style="background:var(--lime)">'+ic('tag',18)+'</span><div><h2>Offer strip</h2><span class="muted">A thin strip at the top of your website</span></div>'+livePill(offerOn, offerOn?(S.offer_until?'Live till '+fmtD(S.offer_until):'Live'):'Off')+'</div>'
     + '<div class="sprev" aria-hidden="true"><div class="sbarp offer"><b id="pOffer">'+esc(S.offer_text||'Your offer appears here')+'</b>'+(S.offer_until?'<small id="pOfferU">till '+fmtD(S.offer_until)+'</small>':'<small id="pOfferU"></small>')+'</div><div class="ghostsite"><i></i><i></i><i></i></div></div>'
+    + '<div class="twrite" id="tw"><button type="button" class="twbtn press" id="twOpen" aria-expanded="false"><span class="sp tface" aria-hidden="true"></span><span class="tx"><b>Write with Tara</b><small>Tell her the occasion and the offer, she writes it</small></span><span class="twch">'+ic('chev')+'</span></button>'
+    + '<div class="twbody" id="twBody" hidden><span class="fl">Occasion</span><div class="qn" id="twOcc">'+['Diwali','Christmas','New Year','Weekend','Wedding season','Other'].map(function(o){ return '<button type="button" class="chip press" aria-pressed="false" data-oc="'+o+'">'+o+'</button>'; }).join('')+'</div>'
+    + '<input class="field" id="twOther" maxlength="40" placeholder="Type the occasion" hidden>'
+    + '<label class="fl" for="twOffer">What is the offer?</label><input class="field" id="twOffer" maxlength="200" placeholder="e.g. 15% off on 1 kg cakes">'
+    + '<button type="button" class="cta press" id="twGo">'+ic('spark',16)+'Write 3 options</button><div id="twOut" aria-live="polite"></div></div></div>'
     + '<label class="fl" for="fOffer">Offer text</label><div class="cnt"><input class="field" id="fOffer" maxlength="120" placeholder="e.g. Diwali offer: 15% off on all 1 kg cakes" value="'+esc(S.offer_text||'')+'"><small><span id="nOffer">'+(S.offer_text||'').length+'</span>/120</small></div>'
     + '<label class="fl" for="fOfferU">Show until <span class="muted">(it disappears by itself)</span></label><input class="field" type="date" id="fOfferU" min="'+t+'" value="'+esc(S.offer_until||'')+'">'
     + '<div class="eact">'+(S.offer_text?'<button type="button" class="chip press" data-clear="offer">Remove offer</button>':'<span></span>')+'<button type="button" class="cta press" data-save="offer">'+ic('check',16,2.4)+(S.offer_text?'Update offer':'Put offer live')+'</button></div></section>';
@@ -1073,8 +1093,36 @@ function siteFX(scr){
   var bindCount = function(inp, cnt, prev){ var i=$(inp); if(!i) return; i.addEventListener('input', function(){ $(cnt).textContent=i.value.length; if (prev) $(prev).textContent = i.value || 'Your offer appears here'; }); };
   bindCount('fOffer','nOffer','pOffer'); bindCount('fNotice','nNotice');
   var ou=$('fOfferU'); if (ou) ou.addEventListener('change', function(){ $('pOfferU').textContent = ou.value ? 'till '+fmtD(ou.value) : ''; });
+  if ($('twOpen')) offerWriter();
   if ($('qNotice')) $('qNotice').addEventListener('click', function(e){ var b=e.target.closest('[data-nq]'); if(!b) return; var f=$('fNotice'); f.value=b.getAttribute('data-nq'); $('nNotice').textContent=f.value.length; f.focus(); });
   scr.addEventListener('click', function(e){ var b=e.target.closest('[data-save]'), c=e.target.closest('[data-clear]'); if (b) saveSite(b.getAttribute('data-save'), b); if (c) saveSite(c.getAttribute('data-clear'), c, true); });
+}
+/* Write with Tara: the owner gives the occasion and the offer; Tara writes 3 short strip texts. */
+function offerWriter(){
+  var occ='', body=$('twBody'), btn=$('twOpen'), out=$('twOut');
+  btn.addEventListener('click', function(){ var open=body.hidden; body.hidden=!open; btn.setAttribute('aria-expanded', open); if (open) $('twOffer').focus(); });
+  $('twOcc').addEventListener('click', function(e){ var b=e.target.closest('[data-oc]'); if(!b) return;
+    $('twOcc').querySelectorAll('[data-oc]').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+    occ=b.getAttribute('data-oc'); $('twOther').hidden = occ!=='Other'; if (occ==='Other') $('twOther').focus(); });
+  $('twGo').addEventListener('click', function(){
+    var o = occ==='Other' ? $('twOther').value.trim() : occ, offer=$('twOffer').value.trim(), go=$('twGo');
+    if (!offer) { toast('Type the offer first'); $('twOffer').focus(); return; }
+    go.disabled=true; var lbl=go.innerHTML; go.innerHTML='<span class="spin"></span>Tara is writing…';
+    out.innerHTML='<div class="sk" style="height:52px;border-radius:16px"></div><div class="sk" style="height:52px;border-radius:16px"></div><div class="sk" style="height:52px;border-radius:16px"></div>';
+    post(TARA, { token:TOKEN, site_id:D.site.site_id, mode:'offer_write', occasion:o, offer:offer, question:offer }, 30000).then(function(r){
+      go.disabled=false; go.innerHTML=lbl;
+      if (r && r.ok && r.options && r.options.length) {
+        out.innerHTML='<p class="hintx">Tap one to use it. You can change any word.</p>'+r.options.map(function(t){ return '<button type="button" class="twopt press" data-t="'+esc(t)+'">'+esc(t)+'</button>'; }).join('')+'<button type="button" class="linkb" id="twAgain">Write again</button>';
+        $('twAgain').addEventListener('click', function(){ go.click(); });
+        out.querySelectorAll('[data-t]').forEach(function(b){ b.addEventListener('click', function(){
+          var f=$('fOffer'); f.value=b.getAttribute('data-t').slice(0,120); f.dispatchEvent(new Event('input'));
+          body.hidden=true; btn.setAttribute('aria-expanded', false); out.innerHTML='';
+          f.scrollIntoView({block:'center', behavior: RM?'auto':'smooth'}); toast('Added. Pick the end date and put it live.'); }); });
+      } else {
+        out.innerHTML='<p class="hintx" style="color:var(--alertInk)">'+esc((r && r.reply) || (r && r.error==='offline' ? 'Couldn\'t connect. Try again.' : 'Tara couldn\'t write it right now. Try again.'))+'</p>';
+      }
+    });
+  });
 }
 function saveSite(part, btn, clear){
   var data, v=function(id){ return ($(id)||{}).value||''; }, t=todayISO();
